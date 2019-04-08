@@ -5,6 +5,12 @@ module SmartProxyDynflowCore
   class Api < ::Sinatra::Base
     helpers Helpers
 
+    configure do
+      ::Sinatra::Base.set :logging, false
+      ::Sinatra::Base.use ::SmartProxyDynflowCore::RequestIdMiddleware
+      ::Sinatra::Base.use ::SmartProxyDynflowCore::LoggerMiddleware
+    end
+
     before do
       authorize_with_token || authorize_with_ssl_client
       content_type :json
